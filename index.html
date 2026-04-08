@@ -5,15 +5,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#000000">
     <title>متابعة الختمة</title>
 
-    <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmElEQVR4nO2Zu2sUURTGf0kUtFDYGBRfiA8wqRSsEkVFLcTGQhsDpvWBAUUL8xCsgkJAhICg6B/gW1L4TKGkUAi4WlmoBAJJRCOSJkKUKxe+hZnLTLIzu4EEzwcH7t655zvfd/dMMwcMBkNeOGAa+AmMAJ+AF8BNoBM4DKyjelgvzi7gFvBSNUekYVqachkpJ8aBe8AJYGMGfn/2JHAf+JahXmaUEjcA24G9wDHd2B3gA/AnodBb4CywJoFzLXAOeJeQ57mK4u5SLV9zmzRUbGQmLAP2A5eAZ8DvSN5f7R1UPNde6bk/+xToFofnqlRP1RKXA63AA2Aq4dan9KxVZ+dEjwsO5r4BYQVwPsLj1/UV8Lly9VXbyFzzODOSE2YkgBlxZiQOMxLAjDgzEocZCWBGnBmJw4wEMCPOjMRhRgKYEWdG4jAjAcyIMyPz1Mgw8BEYBO4CvcBpoBlYmkNAGjxXs7h7NXMZVO3hahiZKfwU6b0mTMf14bpcIw1Am3KLkYmUmyUyG/FYDBQ0aGkCDgHtwDVgAPiVMKx5rS/vqxN4/fDnAvAmYUjkuQbEfUa1mlS7IC3lXFCuXq4FGoFTwCNgMvi3Hkd+PwlufVI5fvy2FajJWHtWI2PAF2BIN9cP3NA4zLfC7QpW8lgCHJXA6PSqFH7vIXBEZ0lpuT2q1a3a/dIyJG1j5RjJMgR9BVzRNHZlwFdQG35WtGsvilXKvaq2Gs+hIxE1KuZvZZN6dJ9upwPo09h4NIXUv7Q9QAtQJ866YL1TZ4opHKOq0aeabdLQKE0N0pi1FVNRrxbo0F8/EQj6DtwGdin8+kdwZkK5F8VVYB7Av/g7gMvq5bRW8D1+HTgALGIBYIte1q8Kv97MAkatwvBf4R9aYjCsBJQAaAAAAABJRU5ErkJggg==">
+    <link rel="icon" type="image/png" id="favicon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmElEQVR4nO2Zu2sUURTGf0kUtFDYGBRfiA8wqRSsEkVFLcTGQhsDpvWBAUUL8xCsgkJAhICg6B/gW1L4TKGkUAi4WlmoBAJJRCOSJkKUKxe+hZnLTLIzu4EEzwcH7t655zvfd/dMMwcMBkNeOGAa+AmMAJ+AF8BNoBM4DKyjelgvzi7gFvBSNUekYVqachkpJ8aBe8AJYGMGfn/2JHAf+JahXmaUEjcA24G9wDHd2B3gA/AnodBb4CywJoFzLXAOeJeQ57mK4u5SLV9zmzRUbGQmLAP2A5eAZ8DvSN5f7R1UPNde6bk/+xToFofnqlRP1RKXA63AA2Aq4dan9KxVZ+dEjwsO5r4BYQVwPsLj1/UV8Lly9VXbyFzzODOSE2YkgBlxZiQOMxLAjDgzEocZCWBGnBmJw4wEMCPOjMRhRgKYEWdG4jAjAcyIMyPz1Mgw8BEYBO4CvcBpoBlYmkNAGjxXs7h7NXMZVO3hahiZKfwU6b0mTMf14bpcIw1Am3KLkYmUmyUyG/FYDBQ0aGkCDgHtwDVgAPiVMKx5rS/vqxN4/fDnAvAmYUjkuQbEfUa1mlS7IC3lXFCuXq4FGoFTwCNgMvi3Hkd+PwlufVI5fvy2FajJWHtWI2PAF2BIN9cP3NA4zLfC7QpW8lgCHJXA6PSqFH7vIXBEZ0lpuT2q1a3a/dIyJG1j5RjJMgR9BVzRNHZlwFdQG35WtGsvilXKvaq2Gs+hIxE1KuZvZZN6dJ9upwPo09h4NIXUv7Q9QAtQJ866YL1TZ4opHKOq0aeabdLQKE0N0pi1FVNRrxbo0F8/EQj6DtwGdin8+kdwZkK5F8VVYB7Av/g7gMvq5bRW8D1+HTgALGIBYIte1q8Kv97MAkatwvBf4R9aYjCsBJQAaAAAAABJRU5ErkJggg==">
+    
+    <link rel="apple-touch-icon" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmElEQVR4nO2Zu2sUURTGf0kUtFDYGBRfiA8wqRSsEkVFLcTGQhsDpvWBAUUL8xCsgkJAhICg6B/gW1L4TKGkUAi4WlmoBAJJRCOSJkKUKxe+hZnLTLIzu4EEzwcH7t655zvfd/dMMwcMBkNeOGAa+AmMAJ+AF8BNoBM4DKyjelgvzi7gFvBSNUekYVqachkpJ8aBe8AJYGMGfn/2JHAf+JahXmaUEjcA24G9wDHd2B3gA/AnodBb4CywJoFzLXAOeJeQ57mK4u5SLV9zmzRUbGQmLAP2A5eAZ8DvSN5f7R1UPNde6bk/+xToFofnqlRP1RKXA63AA2Aq4dan9KxVZ+dEjwsO5r4BYQVwPsLj1/UV8Lly9VXbyFzzODOSE2YkgBlxZiQOMxLAjDgzEocZCWBGnBmJw4wEMCPOjMRhRgKYEWdG4jAjAcyIMyPz1Mgw8BEYBO4CvcBpoBlYmkNAGjxXs7h7NXMZVO3hahiZKfwU6b0mTMf14bpcIw1Am3KLkYmUmyUyG/FYDBQ0aGkCDgHtwDVgAPiVMKx5rS/vqxN4/fDnAvAmYUjkuQbEfUa1mlS7IC3lXFCuXq4FGoFTwCNgMvi3Hkd+PwlufVI5fvy2FajJWHtWI2PAF2BIN9cP3NA4zLfC7QpW8lgCHJXA6PSqFH7vIXBEZ0lpuT2q1a3a/dIyJG1j5RjJMgR9BVzRNHZlwFdQG35WtGsvilXKvaq2Gs+hIxE1KuZvZZN6dJ9upwPo09h4NIXUv7Q9QAtQJ866YL1TZ4opHKOq0aeabdLQKE0N0pi1FVNRrxbo0F8/EQj6DtwGdin8+kdwZkK5F8VVYB7Av/g7gMvq5bRW8D1+HTgALGIBYIte1q8Kv97MAkatwvBf4R9aYjCsBJQAaAAAAABJRU5ErkJggg==">
+
+    <link rel="manifest" href='data:application/manifest+json,{"name":"ختمة 15 يوما","short_name":"ختمة","start_url":".","display":"standalone","background_color":"#000000","theme_color":"#d4af37","icons":[{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmElEQVR4nO2Zu2sUURTGf0kUtFDYGBRfiA8wqRSsEkVFLcTGQhsDpvWBAUUL8xCsgkJAhICg6B/gW1L4TKGkUAi4WlmoBAJJRCOSJkKUKxe+hZnLTLIzu4EEzwcH7t655zvfd/dMMwcMBkNeOGAa+AmMAJ+AF8BNoBM4DKyjelgvzi7gFvBSNUekYVqachkpJ8aBe8AJYGMGfn/2JHAf+JahXmaUEjcA24G9wDHd2B3gA/AnodBb4CywJoFzLXAOeJeQ57mK4u5SLV9zmzRUbGQmLAP2A5eAZ8DvSN5f7R1UPNde6bk/+xToFofnqlRP1RKXA63AA2Aq4dan9KxVZ+dEjwsO5r4BYQVwPsLj1/UV8Lly9VXbyFzzODOSE2YkgBlxZiQOMxLAjDgzEocZCWBGnBmJw4wEMCPOjMRhRgKYEWdG4jAjAcyIMyPz1Mgw8BEYBO4CvcBpoBlYmkNAGjxXs7h7NXMZVO3hahiZKfwU6b0mTMf14bpcIw1Am3KLkYmUmyUyG/FYDBQ0aGkCDgHtwDVgAPiVMKx5rS/vqxN4/fDnAvAmYUjkuQbEfUa1mlS7IC3lXFCuXq4FGoFTwCNgMvi3Hkd+PwlufVI5fvy2FajJWHtWI2PAF2BIN9cP3NA4zLfC7QpW8lgCHJXA6PSqFH7vIXBEZ0lpuT2q1a3a/dIyJG1j5RjJMgR9BVzRNHZlwFdQG35WtGsvilXKvaq2Gs+hIxE1KuZvZZN6dJ9upwPo09h4NIXUv7Q9QAtQJ866YL1TZ4opHKOq0aeabdLQKE0N0pi1FVNRrxbo0F8/EQj6DtwGdin8+kdwZkK5F8VVYB7Av/g7gMvq5bRW8D1+HTgALGIBYIte1q8Kv97MAkatwvBf4R9aYjCsBJQAaAAAAABJRU5ErkJggg==","sizes":"192x192","type":"image/png","purpose":"any maskable"},{"src":"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmElEQVR4nO2Zu2sUURTGf0kUtFDYGBRfiA8wqRSsEkVFLcTGQhsDpvWBAUUL8xCsgkJAhICg6B/gW1L4TKGkUAi4WlmoBAJJRCOSJkKUKxe+hZnLTLIzu4EEzwcH7t655zvfd/dMMwcMBkNeOGAa+AmMAJ+AF8BNoBM4DKyjelgvzi7gFvBSNUekYVqachkpJ8aBe8AJYGMGfn/2JHAf+JahXmaUEjcA24G9wDHd2B3gA/AnodBb4CywJoFzLXAOeJeQ57mK4u5SLV9zmzRUbGQmLAP2A5eAZ8DvSN5f7R1UPNde6bk/+xToFofnqlRP1RKXA63AA2Aq4dan9KxVZ+dEjwsO5r4BYQVwPsLj1/UV8Lly9VXbyFzzODOSE2YkgBlxZiQOMxLAjDgzEocZCWBGnBmJw4wEMCPOjMRhRgKYEWdG4jAjAcyIMyPz1Mgw8BEYBO4CvcBpoBlYmkNAGjxXs7h7NXMZVO3hahiZKfwU6b0mTMf14bpcIw1Am3KLkYmUmyUyG/FYDBQ0aGkCDgHtwDVgAPiVMKx5rS/vqxN4/fDnAvAmYUjkuQbEfUa1mlS7IC3lXFCuXq4FGoFTwCNgMvi3Hkd+PwlufVI5fvy2FajJWHtWI2PAF2BIN9cP3NA4zLfC7QpW8lgCHJXA6PSqFH7vIXBEZ0lpuT2q1a3a/dIyJG1j5RjJMgR9BVzRNHZlwFdQG35WtGsvilXKvaq2Gs+hIxE1KuZvZZN6dJ9upwPo09h4NIXUv7Q9QAtQJ866YL1TZ4opHKOq0aeabdLQKE0N0pi1FVNRrxbo0F8/EQj6DtwGdin8+kdwZkK5F8VVYB7Av/g7gMvq5bRW8D1+HTgALGIBYIte1q8Kv97MAkatwvBf4R9aYjCsBJQAaAAAAABJRU5ErkJggg==","sizes":"512x512","type":"image/png","purpose":"any maskable"}]}'>
 
     <style>
         :root { --bg: #000000; --card: #111111; --accent: #d4af37; --text: #e0e0e0; --dim: #444; --border: #1a1a1a; }
         [data-theme="light"] { --bg: #ffffff; --card: #f8f9fa; --accent: #2563eb; --text: #1e293b; --dim: #94a3b8; --border: #e2e8f0; }
-        
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; }
         body { margin: 0; background: var(--bg); color: var(--text); font-family: sans-serif; overflow: hidden; height: 100vh; }
 
@@ -24,7 +28,6 @@
 
         #reader-container { height: calc(100vh - 120px); width: 100vw; position: relative; overflow: hidden; background: #000; display: flex; align-items: center; justify-content: center; }
 
-        /* حركة الـ Slide الجديدة المريحة */
         .quran-page { 
             position: absolute; 
             max-height: 98%; max-width: 98%; 
@@ -92,29 +95,23 @@
 
     let state = JSON.parse(localStorage.getItem('quran_v6_saad')) || { page: 1, lastStopped: 0, theme: 'dark' };
     
-    // الوظيفة الأساسية للتبديل المريح
     function changePage(direction) {
         const container = document.getElementById('reader-container');
         const oldImg = document.getElementById('activeImg');
         const newPageNum = direction === 'next' ? state.page + 1 : state.page - 1;
 
         if (newPageNum < 1 || newPageNum > 604) return;
-
         state.page = newPageNum;
 
-        // إنشاء الصورة الجديدة
         const newImg = document.createElement('img');
         newImg.src = `pages/1 (${state.page}).png`;
         newImg.className = `quran-page ${direction === 'next' ? 'page-entering-left' : 'page-entering-right'}`;
         container.appendChild(newImg);
 
-        // الانتظار قليلاً للتأكد من أن الصورة جاهزة للتحريك
         requestAnimationFrame(() => {
             newImg.classList.add('page-active');
             newImg.classList.remove('page-entering-left', 'page-entering-right');
             oldImg.classList.add('page-exit');
-            
-            // تنظيف الصورة القديمة بعد انتهاء الحركة
             setTimeout(() => {
                 oldImg.remove();
                 newImg.id = 'activeImg';
@@ -135,7 +132,6 @@
         save();
     }
 
-    // إعداد الصورة الأولى عند تشغيل الموقع
     function init() {
         const img = document.getElementById('activeImg');
         img.src = `pages/1 (${state.page}).png`;
@@ -178,6 +174,18 @@
 
     function save() { localStorage.setItem('quran_v6_saad', JSON.stringify(state)); }
     function resetSystem() { if(confirm("إعادة ضبط؟")) { state.page = 1; save(); location.reload(); } }
+
+    function goToPage() {
+        const target = prompt("اذهب إلى صفحة:", state.page);
+        if (target && !isNaN(target)) {
+            const num = Math.max(1, Math.min(604, parseInt(target)));
+            if (num !== state.page) {
+                const dir = num > state.page ? 'next' : 'prev';
+                state.page = num - (dir === 'next' ? 1 : -1); 
+                changePage(dir);
+            }
+        }
+    }
 
     let startX = 0;
     document.body.addEventListener('touchstart', e => startX = e.touches[0].clientX);
