@@ -3,64 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Quran Sprint - 15 Days</title>
+    <title>متابعة الختمة - 15 يوماً</title>
     <style>
         :root { 
             --bg: #000000; --card: #111111; --accent: #d4af37; --text: #e0e0e0; --dim: #444; --border: #1a1a1a;
         }
-        [data-theme="light"] {
-            --bg: #ffffff; --card: #f8f9fa; --accent: #2563eb; --text: #1e293b; --dim: #94a3b8; --border: #e2e8f0;
+        [data-theme="dark"] {
+            --bg: #000000; --card: #111111; --accent: #d4af37; --text: #e0e0e0; --dim: #444; --border: #1a1a1a;
         }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; transition: background 0.3s, color 0.3s; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: sans-serif; overflow: hidden; height: 100vh; text-align: right; }
+
+        .header { padding: 15px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .stats { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; }
+        .val { color: var(--accent); font-weight: bold; font-size: 14px; cursor: pointer; } /* أضفنا مؤشر الماوس */
+        .progress-bar { position: absolute; top: 0; right: 0; height: 2px; background: var(--accent); transition: width 0.3s; z-index: 10; }
+
+        #reader-container { height: calc(100vh - 120px); width: 100vw; display: flex; align-items: center; justify-content: center; position: relative; z-index: 5; }
+        .quran-page { max-height: 95%; max-width: 95%; object-fit: contain; pointer-events: none; }
+
+        .footer { height: 60px; width: 100%; padding: 15px; background: var(--bg); border-top: 1px solid var(--border); text-align: center; }
+        .pace-tag { font-size: 10px; color: var(--dim); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; transition: all 0.3s; }
+
+        #overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.95); z-index: 100; flex-direction: column; align-items: center; justify-content: center; text-align: center; padding: 20px; }
+        .btn-continue { background: transparent; color: var(--accent); border: 1px solid var(--accent); padding: 15px 40px; border-radius: 4px; font-weight: bold; margin-top: 20px; width: 80%; }
         
-        body { 
-            margin: 0; padding: 0; width: 100%; height: 100vh; 
-            overflow: hidden; background: var(--bg); color: var(--text);
-            font-family: sans-serif; display: flex; flex-direction: column;
-        }
-
-        .header { 
-            padding: 0 15px; background: var(--bg); border-bottom: 1px solid var(--border); 
-            display: flex; justify-content: space-between; align-items: center; min-height: 60px;
-        }
-        .stats { font-size: 11px; color: var(--dim); text-transform: uppercase; }
-        .val { color: var(--accent); font-weight: bold; font-size: 14px; }
-
-        #reader-container { 
-            flex-grow: 1; width: 100vw; display: flex; align-items: center; 
-            justify-content: center; position: relative; background: var(--bg);
-        }
-        
-        .quran-page { 
-            max-height: 100%; max-width: 100%; object-fit: contain; 
-            display: block; pointer-events: none; transition: opacity 0.2s;
-        }
-
-        #loader { 
-            position: absolute; border: 3px solid var(--dim); border-top: 3px solid var(--accent); 
-            border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: none; 
-        }
+        #loader { position: absolute; border: 3px solid var(--dim); border-top: 3px solid var(--accent); border-radius: 50%; width: 25px; height: 25px; animation: spin 1s linear infinite; display: none; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-
-        .footer { 
-            min-height: 60px; width: 100%; padding: 15px; background: var(--bg); 
-            border-top: 1px solid var(--border); text-align: center; 
-        }
-        .pace-tag { font-size: 10px; color: var(--dim); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; }
-
-        #overlay { 
-            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); 
-            z-index: 300; flex-direction: column; align-items: center; justify-content: center; text-align: center; 
-        }
-        .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 40px; border-radius: 8px; font-weight: bold; font-size: 16px; margin-top: 20px; width: 80%; }
     </style>
 </head>
-<body>
+<body data-theme="dark">
+
+<div class="progress-bar" id="totalProgress"></div>
 
 <div class="header">
     <div><div class="stats">اليوم <span id="dayNum" class="val">1</span>/15</div></div>
-    <div style="text-align: left;">
-        <div class="stats">الصفحة</div>
+    <div style="text-align: left;" onclick="goToPage()">
+        <div class="stats" id="sessionLabel">الفترة الصباحية</div>
         <div class="val" id="pageCount">1 / 604</div>
     </div>
 </div>
@@ -71,85 +50,97 @@
 </div>
 
 <div id="overlay">
-    <h2 id="overlayTitle" style="color:var(--accent)">تم إنجاز الورد</h2>
-    <p style="color:#aaa">قمت بإنهاء ورد هذه الفترة بنجاح</p>
-    <button class="btn-main" onclick="hideOverlay()">متابعة القراءة</button>
+    <h2 id="overlayTitle" style="color:var(--accent); font-weight: normal; margin-bottom: 5px;">تم إنجاز الفترة</h2>
+    <p id="overlayMsg" style="color:#888; font-size: 14px;"></p>
+    <button class="btn-continue" onclick="hideOverlay()">المتابعة الآن</button>
 </div>
 
 <div class="footer">
-    <span class="pace-tag">اسحب لليمين للتالي • اسحب لليسار للسابق</span>
+    <span class="pace-tag" id="paceInfo">جاري التحميل...</span>
 </div>
 
 <script>
-    // Configuration
-    const TOTAL_PAGES = 604;
-    const TARGETS = [22]; 
-    for(let i=0; i<28; i++) { TARGETS.push(TARGETS[TARGETS.length-1] + 20); }
-    TARGETS.push(604);
+    const SESSION_TARGETS = [22]; 
+    for(let i=0; i<28; i++) { SESSION_TARGETS.push(SESSION_TARGETS[SESSION_TARGETS.length-1] + 20); }
+    SESSION_TARGETS.push(604);
 
-    let state = JSON.parse(localStorage.getItem('quran_local_v2')) || { page: 1, lastStopped: 0 };
+    let state = JSON.parse(localStorage.getItem('quran_final_v4')) || { page: 1, lastStopped: 0 };
+
+    // ميزة الانتقال السريع لصفحة معينة
+    function goToPage() {
+        const target = prompt("إلى أي صفحة تريد الذهاب؟ (1 - 604)", state.page);
+        const pageNum = parseInt(target);
+        
+        if (pageNum >= 1 && pageNum <= 604) {
+            state.page = pageNum;
+            state.lastStopped = pageNum - 1; // لتجنب ظهور الـ Overlay فوراً إذا كانت الصفحة هدفاً
+            updateUI();
+        } else if (target !== null) {
+            alert("يرجى إدخال رقم صحيح بين 1 و 604");
+        }
+    }
+
+    function getSessionInfo() {
+        const hour = new Date().getHours();
+        const isMorning = hour >= 0 && hour < 15;
+        let sIdx = SESSION_TARGETS.findIndex(t => state.page <= t);
+        if (sIdx === -1) sIdx = 29;
+        const day = Math.ceil((sIdx + 1) / 2);
+        return { 
+            targetPage: SESSION_TARGETS[sIdx],
+            isMorning,
+            day: day > 15 ? 15 : day,
+            isComplete: state.page === 604
+        };
+    }
 
     function updateUI() {
+        const info = getSessionInfo();
         const img = document.getElementById('pageImg');
         const loader = document.getElementById('loader');
         
-        // Match the Windows naming: pages/1 (1).png
         const currentPath = `pages/1 (${state.page}).png`;
         
         loader.style.display = 'block';
-        img.style.opacity = '0.4';
+        img.style.opacity = '0.3';
         img.src = currentPath;
-        
+
         img.onload = () => {
             loader.style.display = 'none';
             img.style.opacity = '1';
         };
 
-        // If high-res PNG fails, check for JPG automatically
         img.onerror = () => {
-            if (img.src.includes(".png")) {
-                img.src = currentPath.replace(".png", ".jpg");
-            } else {
-                loader.style.display = 'none';
-                img.style.opacity = '1';
-            }
+            if (img.src.includes(".png")) img.src = currentPath.replace(".png", ".jpg");
+            loader.style.display = 'none';
         };
 
-        // Stats update
         document.getElementById('pageCount').innerText = `${state.page} / 604`;
-        let sIdx = TARGETS.findIndex(t => state.page <= t);
-        document.getElementById('dayNum').innerText = Math.ceil((sIdx+1)/2);
+        document.getElementById('dayNum').innerText = info.day;
+        document.getElementById('totalProgress').style.width = (state.page / 604 * 100) + '%';
+        document.getElementById('sessionLabel').innerText = info.isMorning ? "الفترة الصباحية" : "الفترة المسائية";
 
-        // Session Overlay Logic
-        if (state.page === TARGETS[sIdx] && state.lastStopped !== state.page) {
-            document.getElementById('overlay').style.display = 'flex';
+        const behind = info.targetPage - state.page;
+        const paceTag = document.getElementById('paceInfo');
+        
+        if (info.isComplete) {
+            paceTag.innerText = "تمت الختمة بحمد الله";
+            paceTag.style.color = "var(--accent)";
+        } else if (behind > 0) {
+            paceTag.innerText = `متبقي ${behind} صفحة للهدف`;
+            paceTag.style.color = "var(--dim)";
+        } else {
+            paceTag.innerText = "أنهيت ورد هذه الفترة ✅";
+            paceTag.style.color = "var(--accent)";
         }
 
-        // Pre-load next page for "Zero Lag"
-        if (state.page < TOTAL_PAGES) {
-            const next = new Image();
-            next.src = `pages/1 (${state.page + 1}).png`;
+        if (state.page === info.targetPage && state.lastStopped !== state.page) {
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('overlayMsg').innerText = `أنهيت المطلوب لهذه الفترة (صفحة ${state.page})`;
         }
         
         save();
     }
-
-    // Swipe Logic
-    let startX = 0;
-    const container = document.getElementById('reader-container');
-
-    container.addEventListener('touchstart', e => {
-        startX = e.touches[0].clientX;
-    }, {passive: true});
-
-    container.addEventListener('touchend', e => {
-        let diff = startX - e.changedTouches[0].clientX;
-        if (Math.abs(diff) > 40) {
-            if (diff < 0 && state.page < TOTAL_PAGES) state.page++; // Swipe Right -> Next
-            else if (diff > 0 && state.page > 1) state.page--;      // Swipe Left -> Prev
-            updateUI();
-        }
-    }, {passive: true});
 
     function hideOverlay() {
         state.lastStopped = state.page;
@@ -157,8 +148,19 @@
         save();
     }
 
-    function save() { localStorage.setItem('quran_local_v2', JSON.stringify(state)); }
-    function resetSystem() { if(confirm("بدء من جديد؟")) { state.page = 1; save(); location.reload(); } }
+    function save() { localStorage.setItem('quran_final_v4', JSON.stringify(state)); }
+
+    let startX = 0;
+    const container = document.getElementById('reader-container');
+    container.addEventListener('touchstart', e => startX = e.touches[0].clientX);
+    container.addEventListener('touchend', e => {
+        let diff = startX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 50) {
+            if (diff < 0 && state.page < 604) state.page++;
+            else if (diff > 0 && state.page > 1) state.page--;
+            updateUI();
+        }
+    });
 
     updateUI();
 </script>
