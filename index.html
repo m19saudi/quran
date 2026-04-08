@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quran Sprint - 15 Days</title>
+    <style>
+        :root { 
+            --bg: #000000; --card: #111111; --accent: #d4af37; --text: #e0e0e0; --dim: #444; --border: #1a1a1a;
+        }
+        [data-theme="light"] {
+            --bg: #ffffff; --card: #f8f9fa; --accent: #2563eb; --text: #1e293b; --dim: #94a3b8; --border: #e2e8f0;
+        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; }
+        
+        body { 
+            margin: 0; padding: 0; width: 100%; height: 100vh; 
+            overflow: hidden; background: var(--bg); color: var(--text);
+            font-family: sans-serif; display: flex; flex-direction: column;
+        }
+
+        .header { 
+            padding: 0 15px; background: var(--bg); border-bottom: 1px solid var(--border); 
+            display: flex; justify-content: space-between; align-items: center; min-height: 60px;
+        }
+        .stats { font-size: 11px; color: var(--dim); text-transform: uppercase; }
+        .val { color: var(--accent); font-weight: bold; font-size: 14px; }
+
+        #reader-container { 
+            flex-grow: 1; width: 100vw; display: flex; align-items: center; 
+            justify-content: center; position: relative; background: var(--bg);
+        }
+        
+        .quran-page { 
+            max-height: 100%; max-width: 100%; object-fit: contain; 
+            display: block; pointer-events: none; transition: opacity 0.2s;
+        }
+
+        #loader { 
+            position: absolute; border: 3px solid var(--dim); border-top: 3px solid var(--accent); 
+            border-radius: 50%; width: 30px; height: 30px; animation: spin 1s linear infinite; display: none; 
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        .footer { 
+            min-height: 60px; width: 100%; padding: 15px; background: var(--bg); 
+            border-top: 1px solid var(--border); text-align: center; 
+        }
+        .pace-tag { font-size: 10px; color: var(--dim); border: 1px solid var(--border); padding: 4px 12px; border-radius: 20px; }
+
+        #overlay { 
+            display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.92); 
+            z-index: 300; flex-direction: column; align-items: center; justify-content: center; text-align: center; 
+        }
+        .btn-main { background: var(--accent); color: #000; border: none; padding: 15px 40px; border-radius: 8px; font-weight: bold; font-size: 16px; margin-top: 20px; width: 80%; }
+    </style>
+</head>
+<body>
+
+<div class="header">
+    <div><div class="stats">اليوم <span id="dayNum" class="val">1</span>/15</div></div>
+    <div style="text-align: left;">
+        <div class="stats">الصفحة</div>
+        <div class="val" id="pageCount">1 / 604</div>
+    </div>
+</div>
+
+<div id="reader-container">
+    <div id="loader"></div>
+    <img src="" id="pageImg" class="quran-page">
+</div>
+
+<div id="overlay">
+    <h2 id="overlayTitle" style="color:var(--accent)">تم إنجاز الورد</h2>
+    <p style="color:#aaa">قمت بإنهاء ورد هذه الفترة بنجاح</p>
+    <button class="btn-main" onclick="hideOverlay()">متابعة القراءة</button>
+</div>
+
+<div class="footer">
+    <span class="pace-tag">اسحب لليمين للتالي • اسحب لليسار للسابق</span>
+</div>
+
+<script>
+    // Configuration
+    const TOTAL_PAGES = 604;
+    const TARGETS = [22]; 
+    for(let i=0; i<28; i++) { TARGETS.push(TARGETS[TARGETS.length-1] + 20); }
+    TARGETS.push(604);
+
+    let state = JSON.parse(localStorage.getItem('quran_local_v2')) || { page: 1, lastStopped: 0 };
+
+    function updateUI() {
+        const img = document.getElementById('pageImg');
+        const loader = document.getElementById('loader');
+        
+        // Match the Windows naming: pages/1 (1).png
+        const currentPath = `pages/1 (${state.page}).png`;
+        
+        loader.style.display = 'block';
+        img.style.opacity = '0.4';
+        img.src = currentPath;
+        
+        img.onload = () => {
+            loader.style.display = 'none';
+            img.style.opacity = '1';
+        };
+
+        // If high-res PNG fails, check for JPG automatically
+        img.onerror = () => {
+            if (img.src.includes(".png")) {
+                img.src = currentPath.replace(".png", ".jpg");
+            } else {
+                loader.style.display = 'none';
+                img.style.opacity = '1';
+            }
+        };
+
+        // Stats update
+        document.getElementById('pageCount').innerText = `${state.page} / 604`;
+        let sIdx = TARGETS.findIndex(t => state.page <= t);
+        document.getElementById('dayNum').innerText = Math.ceil((sIdx+1)/2);
+
+        // Session Overlay Logic
+        if (state.page === TARGETS[sIdx] && state.lastStopped !== state.page) {
+            document.getElementById('overlay').style.display = 'flex';
+        }
+
+        // Pre-load next page for "Zero Lag"
+        if (state.page < TOTAL_PAGES) {
+            const next = new Image();
+            next.src = `pages/1 (${state.page + 1}).png`;
+        }
+        
+        save();
+    }
+
+    // Swipe Logic
+    let startX = 0;
+    const container = document.getElementById('reader-container');
+
+    container.addEventListener('touchstart', e => {
+        startX = e.touches[0].clientX;
+    }, {passive: true});
+
+    container.addEventListener('touchend', e => {
+        let diff = startX - e.changedTouches[0].clientX;
+        if (Math.abs(diff) > 40) {
+            if (diff < 0 && state.page < TOTAL_PAGES) state.page++; // Swipe Right -> Next
+            else if (diff > 0 && state.page > 1) state.page--;      // Swipe Left -> Prev
+            updateUI();
+        }
+    }, {passive: true});
+
+    function hideOverlay() {
+        state.lastStopped = state.page;
+        document.getElementById('overlay').style.display = 'none';
+        save();
+    }
+
+    function save() { localStorage.setItem('quran_local_v2', JSON.stringify(state)); }
+    function resetSystem() { if(confirm("بدء من جديد؟")) { state.page = 1; save(); location.reload(); } }
+
+    updateUI();
+</script>
+</body>
+</html>
