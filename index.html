@@ -3,36 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>متابعة الختمة </title>
+    <title>متابعة الختمة</title>
     <link rel="icon" type="image/png" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADIAAAAyCAYAAAAeP4ixAAAACXBIWXMAAAsTAAALEwEAmpwYAAACmElEQVR4nO2Zu2sUURTGf0kUtFDYGBRfiA8wqRSsEkVFLcTGQhsDpvWBAUUL8xCsgkJAhICg6B/gW1L4TKGkUAi4WlmoBAJJRCOSJkKUKxe+hZnLTLIzu4EEzwcH7t655zvfd/dMMwcMBkNeOGAa+AmMAJ+AF8BNoBM4DKyjelgvzi7gFvBSNUekYVqachkpJ8aBe8AJYGMGfn/2JHAf+JahXmaUEjcA24G9wDHd2B3gA/AnodBb4CywJoFzLXAOeJeQ57mK4u5SLV9zmzRUbGQmLAP2A5eAZ8DvSN5f7R1UPNde6bk/+xToFofnqlRP1RKXA63AA2Aq4dan9KxVZ+dEjwsO5r4BYQVwPsLj1/UV8Lly9VXbyFzzODOSE2YkgBlxZiQOMxLAjDgzEocZCWBGnBmJw4wEMCPOjMRhRgKYEWdG4jAjAcyIMyPz1Mgw8BEYBO4CvcBpoBlYmkNAGjxXs7h7NXMZVO3hahiZKfwU6b0mTMf14bpcIw1Am3KLkYmUmyUyG/FYDBQ0aGkCDgHtwDVgAPiVMKx5rS/vqxN4/fDnAvAmYUjkuQbEfUa1mlS7IC3lXFCuXq4FGoFTwCNgMvi3Hkd+PwlufVI5fvy2FajJWHtWI2PAF2BIN9cP3NA4zLfC7pQW8lgCHJXA6PSqFH7vIXBEZ0lpuT2q1a3a/dIyJG1j5RjJMgR9BVzRNHZlwFdQG35WtGsvilXKvaq2Gs+hIxE1KuZvZZN6dJ9upwPo09h4NIXUv7Q9QAtQJ866YL1TZ4opHKOq0aeabdLQKE0N0pi1FVNRrxbo0F8/EQj6DtwGdin8+kdwZkK5F8VVYB7Av/g7gMvq5bRW8D1+HTgALGIBYIte1q8Kv97MAkatwvBf4R9aYjCsBJQAaAAAAABJRU5ErkJggg==">
 
     <style>
-        :root { 
-            --bg: #000000; --card: #111111; --accent: #d4af37; --text: #e0e0e0; --dim: #444; --border: #1a1a1a;
-        }
-        [data-theme="light"] {
-            --bg: #ffffff; --card: #f8f9fa; --accent: #2563eb; --text: #1e293b; --dim: #94a3b8; --border: #e2e8f0;
-        }
-        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; transition: background 0.3s, color 0.3s; }
-        body { margin: 0; background: var(--bg); color: var(--text); font-family: sans-serif; overflow: hidden; height: 100vh; }
+        :root { --bg: #000000; --card: #111111; --accent: #d4af37; --text: #e0e0e0; --dim: #444; --border: #1a1a1a; }
+        [data-theme="light"] { --bg: #ffffff; --card: #f8f9fa; --accent: #2563eb; --text: #1e293b; --dim: #94a3b8; --border: #e2e8f0; }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; touch-action: none; }
+        body { margin: 0; background: var(--bg); color: var(--text); font-family: sans-serif; overflow: hidden; height: 100vh; transition: background 0.3s; }
 
-        .header { padding: 0 15px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; height: 60px; }
+        .header { padding: 0 15px; background: var(--bg); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; height: 60px; z-index: 10; position: relative; }
         .stats { font-size: 11px; color: var(--dim); text-transform: uppercase; letter-spacing: 1px; }
         .val { color: var(--accent); font-weight: bold; font-size: 14px; cursor: pointer; }
         .progress-bar { position: absolute; top: 0; right: 0; height: 2px; background: var(--accent); transition: width 0.3s; z-index: 10; }
 
         #reader-container { height: calc(100vh - 120px); width: 100vw; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .quran-page { max-height: 98%; max-width: 98%; object-fit: contain; pointer-events: none; transition: opacity 0.15s ease-in-out; }
-        [data-theme="dark"] .quran-page { filter: brightness(0.85) contrast(1.1); } /* ميزة حماية العين */
+        
+        /* Transition Animation */
+        .quran-page { 
+            max-height: 98%; max-width: 98%; object-fit: contain; pointer-events: none; 
+            transition: opacity 0.4s ease, transform 0.4s ease; /* سرعة الانتقال */
+            opacity: 1; transform: scale(1);
+        }
+        .page-hidden { opacity: 0; transform: scale(0.98); } /* حالة الاختفاء عند التبديل */
+
+        [data-theme="dark"] .quran-page { filter: brightness(0.85) contrast(1.1); }
 
         .footer { height: 60px; width: 100%; padding: 15px; background: var(--bg); border-top: 1px solid var(--border); text-align: center; }
-        .pace-tag { font-size: 10px; color: var(--dim); border: 1px solid var(--border); padding: 6px 16px; border-radius: 20px; display: inline-block; }
+        
+        /* المستطيل الصغير (Pace Tag) */
+        .pace-tag { 
+            font-size: 10px; color: var(--dim); border: 1px solid var(--border); 
+            padding: 6px 16px; border-radius: 20px; display: inline-block;
+            background: var(--card);
+        }
 
-        /* Dashboard Styles */
         #dashboard { display: none; position: fixed; inset: 0; background: var(--bg); z-index: 200; padding: 30px 20px; flex-direction: column; overflow-y: auto; }
-        .dash-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
         .grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-        .day-dot { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: bold; border: 1px solid var(--border); background: var(--card); }
+        .day-dot { aspect-ratio: 1; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 12px; border: 1px solid var(--border); background: var(--card); }
         .dot-green { background: #22c55e !important; color: white !important; border: none; }
         .dot-yellow { background: #eab308 !important; color: white !important; border: none; }
         .btn-dash { padding: 15px; border-radius: 8px; background: var(--card); border: 1px solid var(--border); color: var(--text); margin-top: 15px; width: 100%; font-weight: bold; }
@@ -49,8 +57,8 @@
 
 <div class="header">
     <div style="text-align: right;" onclick="goToPage()">
-        <div class="stats" id="sessionLabel">الفترة الصباحية</div>
-        <div class="val" id="pageCount">1 / 604</div>
+        <div class="stats" id="sessionLabel">جاري الحساب...</div>
+        <div class="val" id="pageCount">الصفحة 1</div>
     </div>
     <div onclick="toggleDash()" style="cursor:pointer; text-align: left;">
         <div class="stats">اليوم <span id="dayNum" class="val">1</span>/15</div>
@@ -63,7 +71,7 @@
 </div>
 
 <div id="dashboard">
-    <div class="dash-header">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px;">
         <h2 style="margin:0; color:var(--accent)">الإحصائيات</h2>
         <button onclick="toggleDash()" style="background:none; border:none; color:var(--dim); font-size:24px;">✕</button>
     </div>
@@ -94,22 +102,82 @@
     for(let i=0; i<28; i++) { TARGETS.push(TARGETS[TARGETS.length-1] + 20); }
     TARGETS.push(604);
 
-    let state = JSON.parse(localStorage.getItem('quran_v5_saad')) || { page: 1, lastStopped: 0, theme: 'dark' };
+    let state = JSON.parse(localStorage.getItem('quran_v6_saad')) || { page: 1, lastStopped: 0, theme: 'dark' };
 
-    // ميزة التحميل الفائق (Super Pre-loader)
     function preloadImages(currentPage) {
-        for (let i = 1; i <= 5; i++) {
-            if (currentPage + i <= 604) {
+        const toPreload = [currentPage + 1, currentPage + 2, currentPage - 1];
+        toPreload.forEach(p => {
+            if (p >= 1 && p <= 604) {
                 const img = new Image();
-                img.src = `pages/1 (${currentPage + i}).png`;
+                img.src = `pages/1 (${p}).png`;
             }
-        }
+        });
     }
 
-    function toggleTheme() {
-        state.theme = state.theme === 'dark' ? 'light' : 'dark';
-        document.body.setAttribute('data-theme', state.theme);
+    function updateUI() {
+        const img = document.getElementById('pageImg');
+        const loader = document.getElementById('loader');
+        const info = getSessionInfo();
+        
+        // تطبيق تأثير الانتقال قبل تغيير الصورة
+        img.classList.add('page-hidden');
+        
+        setTimeout(() => {
+            const currentPath = `pages/1 (${state.page}).png`;
+            img.src = currentPath;
+
+            img.onload = () => {
+                loader.style.display = 'none';
+                img.classList.remove('page-hidden'); // إظهار الصورة الجديدة بنعومة
+                preloadImages(state.page);
+            };
+
+            img.onerror = () => {
+                if (img.src.includes(".png")) img.src = currentPath.replace(".png", ".jpg");
+                loader.style.display = 'none';
+                img.classList.remove('page-hidden');
+            };
+        }, 100); // تأخير بسيط لضمان سلاسة الـ Transition
+
+        document.getElementById('pageCount').innerText = `الصفحة ${state.page}`;
+        document.getElementById('dayNum').innerText = info.day;
+        document.getElementById('totalProgress').style.width = (state.page / 604 * 100) + '%';
+        document.getElementById('sessionLabel').innerText = info.isMorning ? "الفترة الصباحية" : "الفترة المسائية";
+
+        // تحديث المستطيل السفلي
+        const behind = info.targetPage - state.page;
+        const paceTag = document.getElementById('paceInfo');
+        if (behind > 0) {
+            paceTag.innerText = `متبقي ${behind} صفحة للهدف`;
+            paceTag.style.color = "var(--dim)";
+        } else {
+            paceTag.innerText = "أنهيت الورد الحالي ✅";
+            paceTag.style.color = "var(--accent)";
+        }
+        
+        if (state.page === info.targetPage && state.lastStopped !== state.page) {
+            document.getElementById('overlay').style.display = 'flex';
+            document.getElementById('overlayMsg').innerText = `وصلت لصفحة ${state.page}`;
+        }
         save();
+    }
+
+    function getSessionInfo() {
+        const hour = new Date().getHours();
+        const isMorning = hour >= 0 && hour < 15;
+        let sIdx = TARGETS.findIndex(t => state.page <= t);
+        if (sIdx === -1) sIdx = 29;
+        const day = Math.ceil((sIdx + 1) / 2);
+        return { targetPage: TARGETS[sIdx], isMorning, day: day > 15 ? 15 : day };
+    }
+
+    function goToPage() {
+        const target = prompt("اذهب إلى صفحة:", state.page);
+        if (target && !isNaN(target)) {
+            state.page = Math.max(1, Math.min(604, parseInt(target)));
+            state.lastStopped = state.page - 1;
+            updateUI();
+        }
     }
 
     function toggleDash() {
@@ -134,59 +202,10 @@
         document.getElementById('dashRem').innerText = `${604 - state.page} صفحة متبقية`;
     }
 
-    function updateUI() {
-        const img = document.getElementById('pageImg');
-        const loader = document.getElementById('loader');
-        const info = getSessionInfo();
-        
-        const currentPath = `pages/1 (${state.page}).png`;
-        
-        loader.style.display = 'block';
-        img.src = currentPath;
-
-        img.onload = () => {
-            loader.style.display = 'none';
-            img.style.opacity = '1';
-            preloadImages(state.page); // تحميل الصفحات القادمة فور نجاح التحميل الحالي
-        };
-
-        img.onerror = () => {
-            if (img.src.includes(".png")) img.src = currentPath.replace(".png", ".jpg");
-            loader.style.display = 'none';
-        };
-
-        document.getElementById('pageCount').innerText = `الصفحة ${state.page}`;
-        document.getElementById('dayNum').innerText = info.day;
-        document.getElementById('totalProgress').style.width = (state.page / 604 * 100) + '%';
-        document.getElementById('sessionLabel').innerText = info.isMorning ? "الفترة الصباحية" : "الفترة المسائية";
-
-        const behind = info.targetPage - state.page;
-        const paceTag = document.getElementById('paceInfo');
-        paceTag.innerText = behind > 0 ? `متبقي ${behind} صفحة للهدف` : "أنهيت الورد الحالي ✅";
-        
-        if (state.page === info.targetPage && state.lastStopped !== state.page) {
-            document.getElementById('overlay').style.display = 'flex';
-            document.getElementById('overlayMsg').innerText = `وصلت لصفحة ${state.page}`;
-        }
+    function toggleTheme() {
+        state.theme = state.theme === 'dark' ? 'light' : 'dark';
+        document.body.setAttribute('data-theme', state.theme);
         save();
-    }
-
-    function getSessionInfo() {
-        const hour = new Date().getHours();
-        const isMorning = hour >= 0 && hour < 15;
-        let sIdx = TARGETS.findIndex(t => state.page <= t);
-        if (sIdx === -1) sIdx = 29;
-        const day = Math.ceil((sIdx + 1) / 2);
-        return { targetPage: TARGETS[sIdx], isMorning, day: day > 15 ? 15 : day };
-    }
-
-    function goToPage() {
-        const target = prompt("اذهب إلى صفحة:", state.page);
-        if (target && !isNaN(target)) {
-            state.page = parseInt(target);
-            state.lastStopped = state.page - 1;
-            updateUI();
-        }
     }
 
     function hideOverlay() {
@@ -195,7 +214,7 @@
         save();
     }
 
-    function save() { localStorage.setItem('quran_v5_saad', JSON.stringify(state)); }
+    function save() { localStorage.setItem('quran_v6_saad', JSON.stringify(state)); }
     function resetSystem() { if(confirm("بدء من جديد؟")) { state.page = 1; save(); location.reload(); } }
 
     let startX = 0;
